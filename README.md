@@ -22,9 +22,20 @@ In Vercel **Project Settings → Environment Variables**, set `DATABASE_URL` to 
 
 The build runs `npm run db:generate && npm run db:deploy`. Migrations add the room/member/assignment/chat/activity tables and copy old saved rooms once, preserving guest tokens. Existing unrelated tables and the legacy snapshot remain intact. Deployment must complete before the new client uses the new API. Test `https://YOUR-SITE.vercel.app/api/health` after deployment; it should return `{"ok":true}`.
 
-Create an office, click **Copy invite link**, and send that link to your friends. The join form fills in the room code automatically. Everyone enters a name and readies up. The host starts when all seats are ready. Rooms support 5–10 players; with fewer friends, the host can **Fill empty seats with simulated colleagues** to reach five. Solo practice remains available with five bots and manual phase advancement.
+Create an office, click the room code in the top bar, and send that link to your friends. The join form fills in the room code automatically. Everyone enters a name and readies up. The host starts when all seats are ready. Rooms support 5–10 players; with fewer friends, the host can **Fill empty seats with bots** to reach five. Solo practice remains available with five bots and manual phase advancement.
 
 The implementation uses short authenticated requests, not a process-local room registry or an open event stream. Vercel function instances can handle different players because PostgreSQL stores the authoritative state and serializes updates to each room. See [Vercel Node functions](https://vercel.com/docs/functions/runtimes/node-js) and [project configuration](https://vercel.com/docs/project-configuration/vercel-json).
+
+## Game controls
+
+The furnished office fills the play screen, with animated coworkers, a status HUD, and menus that open over the game.
+
+- **Move:** WASD or arrow keys on a keyboard; hold the directional buttons on a phone.
+- **Interact:** press E or tap the station prompt when nearby.
+- **Open panels:** T for your desk, J for the workboard, P for the crew, I for evidence, R for your role, and C for chat. The bottom toolbar provides the same controls on touchscreens.
+- **Close:** Escape closes the current dialog, panel, or chat.
+- **Map:** tap the mini-map to switch between the whole office and a camera following your character on small screens.
+- **Game menu:** the top menu button opens the rules, career, notebook, fullscreen, invite, and leave controls. Multiplayer continues while menus are open.
 
 ## Environment
 
@@ -81,7 +92,9 @@ This is **guest-session persistence**, not account/password login. Different dev
 - `server.js`: local HTTP/static-file server using the same API.
 - `prisma/`, `database.js`: schema, migrations, and PostgreSQL adapter.
 - `storage.js`, `scripts/migrate-rooms.js`: compatibility for legacy snapshot imports.
-- `public/`: responsive browser UI and local career tracking.
+- `public/app.js`: browser interactions, game panels, chat, and local career tracking.
+- `public/scene.js`: illustrated office, animated characters, pickups, and following camera.
+- `public/game.css`: game HUD, title screen, overlays, and responsive touch layout.
 
 ## Verify
 

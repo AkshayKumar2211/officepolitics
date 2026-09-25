@@ -4,7 +4,7 @@ import { createDatabase } from './database.js';
 import { createApiHandler } from './api-handler.js';
 try{process.loadEnvFile();}catch(error){if(error.code!=='ENOENT')throw error;}
 const database=createDatabase(),api=createApiHandler(database);
-const files={'/':'index.html','/app.js':'app.js','/styles.css':'styles.css','/progress.js':'progress.js'};
+const files={'/':'index.html','/app.js':'app.js','/styles.css':'styles.css','/progress.js':'progress.js','/scene.js':'scene.js','/game.css':'game.css'};
 const server=http.createServer(async(req,res)=>{
  const url=new URL(req.url,'http://localhost');
  if(url.pathname.startsWith('/api/'))return api(req,res);
