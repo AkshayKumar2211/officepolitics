@@ -44,7 +44,7 @@ export function workplaceAction(game,r,p,type,data){
   if(!near(job.station))fail('Walk to the assignment’s office station first.');
   if(p.energy<1)fail('Take your break to recover energy.');
   if(JSON.stringify(data.answer)!==JSON.stringify(TASKS[job.type].answer))fail('Check the brief and try again.');
-  p.energy--;job.status='review';officeNotice(game,r,`${p.name} submitted ${TASKS[job.type].title}. A second pair of eyes is needed.`,p.id);
+  p.energy--;job.status='review';job.submittedAt=game.now();officeNotice(game,r,`${p.name} submitted ${TASKS[job.type].title}. A second pair of eyes is needed.`,p.id);
  } else if(type==='reviewJob'){
   if(!job||job.status!=='review'||job.ownerId===p.id)fail('A different colleague must review a submitted assignment.');
   if(JSON.stringify(data.answer)!==JSON.stringify(TASKS[job.type].answer))fail('Read the brief carefully before signing off.');

@@ -217,7 +217,7 @@ export class Game {
    }
    if (r.phase === 'work') {
     const review=(r.jobs||[]).find(j=>j.status==='review'&&j.ownerId!==p.id);
-    if(review && (force || elapsed>12000))execute(p,'reviewJob',{id:review.id,answer:TASKS[review.type].answer});
+    if(review && (force || this.now()-(review.submittedAt||this.now())>=8000))execute(p,'reviewJob',{id:review.id,answer:TASKS[review.type].answer});
     if (force || this.now() >= p.botNextTask) {
      const tasks = p.tasks.filter(t => !t.done).slice(0, force ? 3 : 1);
      for (const task of tasks) execute(p, 'task', { id: task.id, answer: TASKS[task.type].answer });
@@ -268,7 +268,7 @@ export class Game {
  }
  view(token) {
   const {r,p} = this.session(token); ensureWorkplace(r);
-  return { workplace:workplaceView(r,p), coffee: r.coffee || [], practice: !!r.practice, project: r.project, officeEvent: r.officeEvent, goal: r.goal, workSeconds: (r.practice ? PRACTICE_DURATIONS : DURATIONS).work, catalog: { taskCount: TASKS.length, projectCount: PROJECTS.length, actions: ACTIONS, prompts: PROMPTS }, code: r.code, capacity: r.capacity, hostId: r.hostId, phase: r.phase, round: r.round, progress: r.progress, deadline: r.deadline, now: this.now(), matchId: r.matchId, ending: r.ending, fileMissing: !!r.fileMissing,
+  return { revision:r.revision||0, workplace:workplaceView(r,p), coffee: r.coffee || [], practice: !!r.practice, project: r.project, officeEvent: r.officeEvent, goal: r.goal, workSeconds: (r.practice ? PRACTICE_DURATIONS : DURATIONS).work, catalog: { taskCount: TASKS.length, projectCount: PROJECTS.length, actions: ACTIONS, prompts: PROMPTS }, code: r.code, capacity: r.capacity, hostId: r.hostId, phase: r.phase, round: r.round, progress: r.progress, deadline: r.deadline, now: this.now(), matchId: r.matchId, ending: r.ending, fileMissing: !!r.fileMissing,
    players: r.players.map(x => ({ id:x.id, reputation:x.reputation, department:x.department, x:x.x, y:x.y, coffee:x.coffee || 0, emote:x.emoteUntil > this.now() ? x.emote : null, bot: !!x.bot, name:x.name, designation:x.designation, connected:x.connected, ready:x.ready, alive:x.alive, lives:x.lives, rank:RANKS[x.rank], ...(r.phase === 'ended' ? {faction:x.faction} : {}) })),
    me: { id:p.id, recommended: !!p.recommended, objectiveDone: !!p.objectiveDone, sabotages: p.sabotages, objectives: p.objectives, sideObjective: !p.alive ? null : p.faction === 'operative' ? 'Complete a task and use a sabotage action today.' : 'Complete all three personal tasks today.', faction:p.alive ? p.faction : null, objective:p.alive ? (p.faction === 'operative' ? 'Blend in. Disrupt one contribution each workday and survive the vote.' : 'Keep the project moving. Compare clues and identify the operatives.') : 'Observe quietly. You can rejoin the team next match.', tasks: p.alive ? p.tasks.map(t => {const { answer, ...content } = TASKS[t.type]; return {...content, id:t.id, done:t.done};}) : [], actionUsed:p.actionUsed, influence:p.influence, influenceUsed:p.influenceUsed, appealUsed:p.appealUsed, voted:Object.hasOwn(r.votes,p.id), appealVoted:Object.hasOwn(r.appealVotes,p.id), rumor:p.alive?p.rumor:null, completed:p.completed, correctVotes:p.correctVotes },
    clues: ['incident','meeting','vote','appeal','resolution','ended'].includes(r.phase) ? r.clues : [], chat:r.chat, accused:r.accused, explanation:r.explanation, result:['resolution','ended','appeal'].includes(r.phase)?r.result:null,

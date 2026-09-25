@@ -12,3 +12,68 @@ model OfficePoliticsSnapshot {
   payload   Json
   savedAt   DateTime @updatedAt
 }
+
+model OfficeRoom {
+  code      String   @id
+  phase     String
+  capacity  Int
+  practice  Boolean  @default(false)
+  state     Json
+  updatedAt DateTime @updatedAt
+  members   OfficeMember[]
+  jobs      OfficeAssignment[]
+  messages  OfficeChatMessage[]
+  events    OfficeActivity[]
+  @@index([updatedAt])
+}
+
+model OfficeMember {
+  id          String @id
+  roomCode    String
+  room        OfficeRoom @relation(fields: [roomCode], references: [code], onDelete: Cascade)
+  sessionHash String? @unique
+  name        String
+  designation String
+  department  String
+  bot         Boolean @default(false)
+  reputation  Int @default(0)
+  connected   Boolean @default(false)
+  lastSeen    DateTime?
+  @@index([roomCode])
+}
+
+model OfficeAssignment {
+  id         String @id
+  roomCode   String
+  room       OfficeRoom @relation(fields: [roomCode], references: [code], onDelete: Cascade)
+  title      String
+  category   String
+  station    String
+  status     String
+  round      Int
+  ownerId    String?
+  reviewerId String?
+  @@index([roomCode, status])
+}
+
+model OfficeChatMessage {
+  id       String @id
+  roomCode String
+  room     OfficeRoom @relation(fields: [roomCode], references: [code], onDelete: Cascade)
+  playerId String
+  name     String
+  text     String
+  round    Int
+  @@index([roomCode, round])
+}
+
+model OfficeActivity {
+  id       String @id
+  roomCode String
+  room     OfficeRoom @relation(fields: [roomCode], references: [code], onDelete: Cascade)
+  actorId  String?
+  text     String
+  round    Int
+  at       DateTime
+  @@index([roomCode, at])
+}
