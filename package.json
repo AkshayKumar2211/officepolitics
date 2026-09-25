@@ -1,5 +1,30 @@
 {
-  "name": "office-politics", "version": "1.0.0", "private": true,
-  "type": "module", "scripts": { "start": "node server.js", "dev": "node --watch server.js", "test": "node --test" },
-  "engines": { "node": ">=20" }
+  "name": "office-politics",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "db:generate": "prisma generate",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.10.0"
+  },
+  "overrides": {
+    "deepmerge-ts": "8.0.2",
+    "mysql2": "3.24.4"
+  }
 }

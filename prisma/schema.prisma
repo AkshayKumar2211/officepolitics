@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Private authoritative state, including guest credentials and hidden roles.
+model OfficePoliticsSnapshot {
+  id        String   @id
+  payload   Json
+  savedAt   DateTime @updatedAt
+}

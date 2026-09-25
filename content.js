@@ -1,7 +1,7 @@
-// Built-in game content. No database, downloads, or external services.
+// Server-only task briefs and answers.
 export const DESIGNATIONS = ['Software Engineer', 'Designer', 'HR Representative', 'Team Manager', 'Project Manager', 'Office Coordinator', 'Finance Analyst', 'Marketing Associate', 'Operations Lead', 'Intern'];
 export const RANKS = ['Intern', 'Associate', 'Senior Associate', 'Team Lead', 'Department Manager', 'Executive'];
-export const DURATIONS = { briefing: 20, work: 90, incident: 10, meeting: 60, vote: 20, appeal: 20, resolution: 10 };
+export const DURATIONS = { briefing: 20, work: 180, incident: 10, meeting: 60, vote: 20, appeal: 20, resolution: 10 };
 export const ACTIONS = ['Delay the Report', 'Move the File', 'Plant a Misleading Note', 'Take Credit', 'Gossip'];
 export const PROMPTS = ['I noticed activity around the project board.', 'A missed task is not proof of sabotage.', 'Let’s compare the evidence before voting.', 'I was working on the shared project.', 'That clue could have been planted.', 'I think we should abstain this round.'];
 export const EXPLANATIONS = ['I was fixing the shared file.', 'I was in a meeting.', 'That clue was planted.'];
@@ -55,3 +55,19 @@ export const OFFICE_EVENTS = [
  { title: 'Teamwork Tuesday', description: 'Tasks add 5%; clearing your desk adds another 4%.', taskPoints: 5, deskBonus: 4, restorePoints: 4 }
 ];
 export const PRACTICE_DURATIONS = { briefing: 8, work: 60, incident: 8, meeting: 25, vote: 15, appeal: 20, resolution: 8 };
+
+TASKS.push(
+ {title:'Approve the Purchase Order',category:'Finance',kind:'choice',instruction:'A purchase needs manager approval above $250. Which order needs approval?',options:['Mouse pads · $40','New monitor · $320','Printer paper · $65'],answer:[1],icon:'receipt'},
+ {title:'Triage the Security Alert',category:'Engineering',kind:'order',instruction:'Contain the affected account, inspect the logs, reset credentials, then document the incident.',options:['Document the incident','Reset credentials','Contain the account','Inspect the logs'],answer:[2,3,1,0],icon:'shield'},
+ {title:'Respond to an Upset Client',category:'Support',kind:'order',instruction:'Acknowledge the impact, confirm the facts, offer a next step, and agree on an update time.',options:['Agree on update time','Acknowledge the impact','Offer a next step','Confirm the facts'],answer:[1,3,2,0],icon:'people'},
+ {title:'Calculate the Campaign Return',category:'Marketing',kind:'choice',instruction:'A campaign costs $200 and produces $500 in sales. What is sales minus campaign cost?',options:['$700','$200','$300'],answer:[2],icon:'slides'},
+ {title:'Resolve a Calendar Conflict',category:'Operations',kind:'choice',instruction:'The boardroom is booked 10:00–11:00 and 12:00–13:00. Which hour is free?',options:['10:30–11:30','11:00–12:00','12:00–13:00'],answer:[1],icon:'calendar'},
+ {title:'Redact the Client Export',category:'People',kind:'choice',instruction:'A public example needs anonymous sample data. Which field must be removed?',options:['Column headings','A real client’s email address','A fictional company name'],answer:[1],icon:'shield'},
+ {title:'Prepare the Sprint Handover',category:'Engineering',kind:'order',instruction:'Reproduce the bug, add a regression check, ship the fix, and update the support team.',options:['Ship the fix','Update support','Reproduce the bug','Add a regression check'],answer:[2,3,0,1],icon:'code'},
+ {title:'Check the Accessibility Contrast',category:'Design',kind:'choice',instruction:'The design brief requires readable labels and no color-only status indicators. Which design fits?',options:['Red and green dots without labels','Pale text on white','High-contrast text with icons and labels'],answer:[2],icon:'eye'},
+ {title:'Reconcile the Petty Cash',category:'Finance',kind:'choice',instruction:'The cash box starts with $120. Receipts total $45 and $28. How much remains?',options:['$47','$57','$73'],answer:[0],icon:'receipt'},
+ {title:'Ship the Contract Renewal',category:'Operations',kind:'order',instruction:'Confirm the scope, review the terms, collect signatures, then archive the agreement.',options:['Archive the agreement','Collect signatures','Confirm the scope','Review the terms'],answer:[2,3,1,0],icon:'briefcase'},
+ {title:'Choose the Honest Status Update',category:'Product',kind:'choice',instruction:'Two of five milestones are complete and one is blocked. Which update gives useful facts?',options:['Everything is perfect','Two of five done; one blocked; owner investigating','We are basically finished'],answer:[1],icon:'inbox'},
+ {title:'Plan Across Time Zones',category:'Communications',kind:'choice',instruction:'London is UTC+0 and a colleague is UTC+5. A 09:00 London call starts at what colleague time?',options:['04:00','14:00','09:00'],answer:[1],icon:'clock'}
+);
+ACTIONS.push('Jam the Printer', 'Scope Creep');

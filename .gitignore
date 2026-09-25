@@ -7,3 +7,6 @@ coverage/
 .DS_Store
 .codex/
 .agents/
+
+# Legacy private save backups
+data/
