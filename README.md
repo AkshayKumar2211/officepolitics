@@ -20,7 +20,19 @@ Push these changes to the GitHub repository connected to your Vercel project. `v
 
 In Vercel **Project Settings → Environment Variables**, set `DATABASE_URL` to the working PostgreSQL URL for **Production**. Local `.env` files are not uploaded to Vercel. Use the session connection on port **5432** for the current database: its transaction endpoint on 6543 stalled Prisma migrations. Never use a `PUBLIC_` prefix for database credentials. If you enable Preview deployments, preferably use a separate preview database.
 
-The build runs `npm run db:generate && npm run db:deploy`. Migrations add the room/member/assignment/chat/activity tables and copy old saved rooms once, preserving guest tokens. Existing unrelated tables and the legacy snapshot remain intact. Deployment must complete before the new client uses the new API. Test `https://YOUR-SITE.vercel.app/api/health` after deployment; it should return `{"ok":true}`.
+The Vercel build runs `npm run build`, which generates the Prisma client without connecting to PostgreSQL. Database migrations run separately so an unavailable database cannot hold up an ordinary deployment.
+
+Before the first deployment, and whenever `prisma/migrations/` changes, run the following from a trusted machine with `.env` pointing at the **same production database used by Vercel**:
+
+```sh
+npm run db:deploy
+```
+
+Wait for this command to succeed before pushing the schema-dependent application update. If it stalls, check the database password and use the provider’s migration-compatible direct or session connection (port 5432 for this project's current provider). Do not continue deploying schema-dependent changes until migration succeeds. Pure visual/game interface changes do not need this step if the schema is already current.
+
+Migrations add the room/member/assignment/chat/activity tables and copy old saved rooms once, preserving guest tokens. Existing unrelated tables and the legacy snapshot remain intact. Test `https://YOUR-SITE.vercel.app/api/health` after deployment; it should return `{"ok":true}`.
+
+If Vercel still runs the old migration command, clear the Build Command override in **Project Settings → Build and Deployment**, or set it to `npm run build`. Keep Output Directory as `public` and Framework Preset as **Other**. Cancel the stalled deployment and deploy the updated commit. For further timeouts, inspect the last build log line to distinguish dependency installation, Prisma generation, and function packaging delays.
 
 Create an office, click the room code in the top bar, and send that link to your friends. The join form fills in the room code automatically. Everyone enters a name and readies up. The host starts when all seats are ready. Rooms support 5–10 players; with fewer friends, the host can **Fill empty seats with bots** to reach five. Solo practice remains available with five bots and manual phase advancement.
 

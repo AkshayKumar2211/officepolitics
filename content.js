@@ -14,6 +14,7 @@ export const TASKS = [
  { title: 'Route the Support Tickets', category: 'Support', kind: 'choice', instruction: 'A customer was charged twice for a subscription. Which department should receive the ticket?', options: ['Design', 'Facilities', 'Finance'], answer: [2], icon: 'route' },
 ];
 
+
 TASKS.push(
  { title: 'Audit the Inventory', category: 'Operations', kind: 'choice', instruction: 'We bought 18 keyboards and issued 11. How many should remain?', options: ['5 keyboards', '7 keyboards', '9 keyboards'], answer: [1], icon: 'briefcase' },
  { title: 'Plan the Product Launch', category: 'Marketing', kind: 'order', instruction: 'Arrange the launch: research, build the campaign, then publish.', options: ['Publish the announcement', 'Research the audience', 'Build the campaign'], answer: [1, 2, 0], icon: 'slides' },
